@@ -1,4 +1,4 @@
-# Mini Movie Server
+# Mini Movie Server v0.1
 
 ### Description:
 ###### This is a python script that creates an HTML file based on the Movies/Movie folders within the same directory. This utilizes bootstrap as it's frontend.

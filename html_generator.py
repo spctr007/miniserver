@@ -30,7 +30,7 @@ def retrieve_dirs():
     dirs = []
     directories = glob('*/')
     for directory in directories:
-        if directory not in ASSETS_FOLDER :
+        if directory not in ASSETS_FOLDER:
             dirs.append(directory)
 
     return dirs
@@ -38,6 +38,7 @@ def retrieve_dirs():
 
 def convert_srt(directory, subtitle_file):
     pass
+
 
 def read_dir():
     video_list = []
@@ -59,7 +60,7 @@ def read_dir():
                         new_vid.title = os.path.splitext(curr_file)[0]
                     elif curr_file.endswith(tuple(img_ext)):
                         new_vid.image = curr_file
-                    elif curr_file.endswith('.srt'):
+                    elif curr_file.endswith(tuple(sub_ext)):
                         new_vid.subtitle = curr_file
                         convert_srt(sub_dir, curr_file)
                     else:
@@ -95,7 +96,8 @@ def generate_html(this_videos_list):
                 with tag('div', klass='container'):
                     with tag('a', klass='navbar-brand', href='#'):
                         text('Movie Database')
-                    doc.asis('<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">')
+                    doc.asis(
+                        '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">')
                     doc.asis('<span class="navbar-toggler-icon"></span>')
                     doc.asis('</button>')
                     with tag('div', klass='collapse navbar-collapse', id='navbarResponsive'):
@@ -119,9 +121,9 @@ def generate_html(this_videos_list):
                 # -- Jumbotron Header -- #
                 with tag('header', klass='jumbotron my-4'):
                     with tag('h1', klass='display-3'):
-                        text('Welcome to Eslava\'s Movie Site')
+                        text('Welcome to Our Movie Collection')
                         with tag('p', klass='lead'):
-                            text('This is the latest collection of movies downloaded from YTS.AM')
+                            text('This is our latest collection of movies downloaded from YTS.AM')
                         with tag('a', href='https://yts.am/', klass='btn btn-primary btn-lg', target='_blank'):
                             text('Bring me to YIFY')
                 # -- Page Features -- #
