@@ -1,13 +1,22 @@
 # Mini Movie Server v0.1
 
 ### Description:
-###### This is a python script that creates an HTML file based on the Movies/Movie folders within the same directory. This utilizes bootstrap as it's frontend.
+###### This is a python script that creates an HTML file based on the Movies/Movie folders within the same directory. This utilizes bootstrap as its frontend.
 
 ### Prerequisite:
 * Installed `python 2.x or 3.x`
+* Additional libraries:
+    * yattag
+    ```
+        $ pip install yattag
+    ```
+    * glob
+    ```
+        $ pip install glob
+    ```
 * Installed `Nginx` on your local machine.
     * [Install Nginx on Ubuntu](https://mediatemple.net/community/products/developer/204405534/install-nginx-on-ubuntu)
-* Checkout the code in the Videos directory.
+* Checkout this repository in the Videos directory.
     
     **Note:** 
     The directory of the folder/s must have the following hierarchy:
