@@ -128,7 +128,6 @@ def generate_html(this_videos_list):
                             text('Bring me to YIFY')
                 # -- Page Features -- #
                 total_count = len(this_videos_list)
-                print('total count:' + str(total_count))
                 counter = 0
                 for video in this_videos_list:
                     if counter <= total_count:
@@ -160,7 +159,7 @@ def generate_html(this_videos_list):
             with tag('footer', klass='py-5 bg-dark'):
                 with tag('div', klass='container'):
                     with tag('p', klass='m-0 text-center text-white'):
-                        text('Copyright  2018 Eslava Movie Database')
+                        text('Copyright (c) 2018 Eslava Movie Database')
 
             # -- Bootstrap core Javascript -- #
             doc.asis('<script src="vendor/jquery/jquery.min.js"></script>')
