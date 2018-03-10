@@ -4,13 +4,17 @@ from glob import glob
 
 from yattag import Doc
 
-ASSETS_FOLDER = ['assets/', 'css/', 'vendor/']
+from convert_srt_to_vtt import start_conversion
+
+ASSETS_FOLDER = ['assets/', 'css/', 'vendor/', '__pycache__/']
 
 
 class Video(object):
 
     def __init__(self):
         self.title = ''
+        self.video_filename = ''
+        self.year = ''
         self.subtitle = ''
         self.video = ''
         self.image = ''
@@ -25,6 +29,23 @@ class Video(object):
     def get_subtitle_path(self):
         return self.directory + self.subtitle
 
+    def get_full_title(self):
+        return self.title + ' (' + self.year + ')'
+
+
+def parse_title(movie_filename):
+    title = movie_filename.split('.')
+    actual_title = ''
+    year = 0
+    for word in title:
+        if word.isdigit() and len(word) == 4:
+            year = word
+            break
+        else:
+            actual_title = actual_title + word
+
+    return actual_title, year
+
 
 def retrieve_dirs():
     dirs = []
@@ -36,14 +57,10 @@ def retrieve_dirs():
     return dirs
 
 
-def convert_srt(directory, subtitle_file):
-    pass
-
-
 def read_dir():
     video_list = []
     video_ext = ['.mp4', '.mkv', '.avi']
-    sub_ext = ['.srt']
+    sub_ext = ['.vtt']
     img_ext = ['jpg', '.png', '.tif']
 
     sub_dirs = retrieve_dirs()
@@ -54,15 +71,25 @@ def read_dir():
             # This would include the title, video file, subtitle and image.
             new_vid.directory = sub_dir
             for curr_file in files:
-                if os.path.isfile(sub_dir + '/' + curr_file):
+                full_file_path = sub_dir + curr_file
+                if os.path.isfile(full_file_path):
+                    # set the video filename
                     if curr_file.endswith(tuple(video_ext)):
                         new_vid.video = curr_file
-                        new_vid.title = os.path.splitext(curr_file)[0]
+                        new_vid.title, new_vid.year = parse_title(curr_file)
+                    # set the image
                     elif curr_file.endswith(tuple(img_ext)):
                         new_vid.image = curr_file
-                    elif curr_file.endswith(tuple(sub_ext)):
+                    # set the subtitle
+                    elif curr_file.endswith('vtt'):
                         new_vid.subtitle = curr_file
-                        convert_srt(sub_dir, curr_file)
+                    elif curr_file.endswith('srt'):
+                        # check if the vtt file exists
+                        vtt_file = os.path.splitext(curr_file)[0]
+                        vtt_path = sub_dir + '/' + vtt_file + '.vtt'
+                        if not os.path.isfile(vtt_path):
+                            subtitle = start_conversion(full_file_path, vtt_path)
+                            new_vid.subtitle = str(subtitle)
                     else:
                         pass
         video_list.append(new_vid)
@@ -89,13 +116,13 @@ def generate_html(this_videos_list):
             doc.stag('link', rel='stylesheet', href='vendor/bootstrap/css/bootstrap.min.css')
             doc.stag('link', rel='stylesheet', href='css/main.css')
             with tag('title'):
-                text('My Movie Player')
+                text('Director\'s Seat')
         with tag('body'):
             # -- Navigation -- #
             with tag('nav', klass='navbar navbar-expand-lg navbar-dark bg-dark fixed-top'):
                 with tag('div', klass='container'):
                     with tag('a', klass='navbar-brand', href='#'):
-                        text('Movie Database')
+                        text('Director\'s Seat')
                     doc.asis(
                         '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">')
                     doc.asis('<span class="navbar-toggler-icon"></span>')
@@ -123,9 +150,9 @@ def generate_html(this_videos_list):
                     with tag('h1', klass='display-3'):
                         text('Welcome to Our Movie Collection')
                         with tag('p', klass='lead'):
-                            text('This is our latest collection of movies downloaded from YTS.AM')
+                            text('This is our latest collection of movies downloaded from YIFY (YTS.AM)')
                         with tag('a', href='https://yts.am/', klass='btn btn-primary btn-lg', target='_blank'):
-                            text('Bring me to YIFY')
+                            text('Take me to YIFY')
                 # -- Page Features -- #
                 total_count = len(this_videos_list)
                 counter = 0
@@ -138,9 +165,9 @@ def generate_html(this_videos_list):
                                     doc.stag('img', klass='card-img-top', src=video.get_image_path(), alt=video.title)
                                     with tag('div', klass='card-body'):
                                         with tag('h4', klass='card-title'):
-                                            text(video.title)
+                                            text(video.get_full_title())
                                     with tag('div', klass='card-footer'):
-                                        with tag('a', href=video.get_video_path(), klass='btn btn-primary'):
+                                        with tag('a', href=video.directory + 'player.html', klass='btn btn-primary'):
                                             text('Play Movie')
                             counter += 1
                         else:
@@ -149,9 +176,9 @@ def generate_html(this_videos_list):
                                     doc.stag('img', klass='card-img-top', src=video.get_image_path(), alt=video.title)
                                     with tag('div', klass='card-body'):
                                         with tag('h4', klass='card-title'):
-                                            text(video.title)
+                                            text(video.get_full_title())
                                     with tag('div', klass='card-footer'):
-                                        with tag('a', href=video.get_video_path(), klass='btn btn-primary'):
+                                        with tag('a', href=video.directory + 'player.html', klass='btn btn-primary'):
                                             text('Play Movie')
                             counter += 1
                 doc.asis('</div>')
@@ -173,6 +200,76 @@ def generate_html(this_videos_list):
     f.close()
 
 
+# generate video player page
+def generate_video_player_html(movie_list):
+    for video in movie_list:
+        doc, tag, text, line = Doc().ttl()
+        doc.asis('<!DOCTYPE html>')
+        with tag('html', lang='en'):
+            with tag('head'):
+                doc.stag('meta', charset='utf-8')
+                doc.stag('meta', name='viewport', content='width=device-width initial-scale=1, shrink-to-fit=no')
+                doc.stag('meta', name='description', content='')
+                doc.stag('meta', name='author', content='')
+                doc.stag('link', rel='stylesheet', href='../vendor/bootstrap/css/bootstrap.min.css')
+                doc.stag('link', rel='stylesheet', href='../css/main.css')
+                with tag('title'):
+                    text('Director\'s Seat')
+            with tag('body'):
+                # -- Navigation -- #
+                with tag('nav', klass='navbar navbar-expand-lg navbar-dark bg-dark fixed-top'):
+                    with tag('div', klass='container'):
+                        with tag('a', klass='navbar-brand', href='../index.html'):
+                            text('Director\'s Seat')
+                        doc.asis(
+                            '<button class="navbar-toggler" type="button" data-toggle="collapse"' +
+                            ' data-target="#navbarResponsive" aria-controls="navbarResponsive"' +
+                            ' aria-expanded="false" aria-label="Toggle navigation">')
+                        doc.asis('<span class="navbar-toggler-icon"></span>')
+                        doc.asis('</button>')
+                        with tag('div', klass='collapse navbar-collapse', id='navbarResponsive'):
+                            with tag('ul', klass='navbar-nav ml-auto'):
+                                with tag('li', klass='nav-item active'):
+                                    with tag('a', klass='nav-link', href='../index.html'):
+                                        text('Home')
+                                        with tag('span', klass='sr-only'):
+                                            text('(current)')
+                                with tag('li', klass='nav-item'):
+                                    with tag('a', klass='nav-link', href='https://yts.am', target='_blank'):
+                                        text('YTS.AM')
+                                with tag('li', klass='nav-item'):
+                                    with tag('a', klass='nav-link', href='#'):
+                                        text('Services')
+                                with tag('li', klass='nav-item'):
+                                    with tag('a', klass='nav-link', href='#'):
+                                        text('Contact')
+                # -- Page Content -- #
+                with tag('div', klass='container'):
+                    with tag('div', klass='card'):
+                        with tag('div', klass='header'):
+                            text(video.get_full_title())
+                        with tag('div', klass='card-body'):
+                            with tag('video', src=video.video, controls='', autoplay=''):
+                                doc.asis('<track kind="subtitles" label="English" src="' +
+                                         video.subtitle + '" srclang="en" default="">')
+
+                with tag('footer', klass='py-5 bg-dark'):
+                    with tag('div', klass='container'):
+                        with tag('p', klass='m-0 text-center text-white'):
+                            text('Copyright (c) 2018 Eslava Movie Database')
+
+                # -- Bootstrap core Javascript -- #
+                doc.asis('<script src="vendor/jquery/jquery.min.js"></script>')
+                doc.asis('<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>')
+
+        print('Successfully generated player HTML file to ' + video.directory)
+
+        f = open(video.directory + 'player.html', 'w')
+
+        f.write(doc.getvalue())
+        f.close()
+
+
 if __name__ == '__main__':
     video_list = read_dir()
     # print(len(video_list))
@@ -180,3 +277,4 @@ if __name__ == '__main__':
     #     print(video.title)
     #     print(video.subtitle)
     generate_html(video_list)
+    generate_video_player_html(video_list)
