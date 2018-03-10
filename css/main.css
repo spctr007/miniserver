@@ -5,16 +5,20 @@
  */
 
 body {
-  padding-top: 54px;
+    padding-top: 54px;
 }
 
 @media (min-width: 992px) {
-  body {
-    padding-top: 56px;
-  }
+    body {
+        padding-top: 56px;
+    }
 }
 
 .card {
-  height: 100%;
-  max-width: 255px;
+    height: 100%;
+    /*max-width: 255px;*/
+}
+
+video {
+    width: 100%;
 }
