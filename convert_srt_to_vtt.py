@@ -16,8 +16,8 @@ def start_conversion(srt_path, vtt_path):
                 # print(h)
                 match = re.match(r'[\d]{2}:[\d]{2}:[\d]{2},[\d]{3}', line)
                 if match:
-                    new_line_for_vtt = line.replace(',', '.').replace('\n', ' ')
-                    full = new_line_for_vtt + 'align:middle line:90%\n'
+                    new_line_for_vtt = line.replace(',', '.').replace('\n', ' ').rstrip()
+                    full = new_line_for_vtt.join(' align:middle line:84%\n')
                     vtt_file.write(full)
                 else:
                     vtt_file.write(line)
