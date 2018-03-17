@@ -8,6 +8,7 @@ from convert_srt_to_vtt import start_conversion
 from image_handler import retrieve_image_from_url
 
 ASSETS_FOLDER = ['assets/', 'css/', 'vendor/', '__pycache__/', 'miniserver/']
+IMAGE_FILENAME = 'medium-cover.jpg'
 
 
 class Video(object):
@@ -35,6 +36,11 @@ class Video(object):
 
 
 def parse_title(movie_filename):
+    """
+    Parsing of the title and year based on the Movie's filename.
+    :param movie_filename:
+    :return: title, year
+    """
     title = movie_filename.split('.')
     actual_title = ''
     year = 0
@@ -49,6 +55,11 @@ def parse_title(movie_filename):
 
 
 def retrieve_dirs():
+    """
+    Navigate to the root directory of all the Movies and
+    get the list of movie directories.
+    :return: Array of Directory names.
+    """
     dirs = []
     os.chdir('../')
     directories = glob('*/')
@@ -60,31 +71,51 @@ def retrieve_dirs():
 
 
 def read_dir():
+    """
+    Traverse through each of the movie directories and
+    retrieve all the movie details.
+    These include the following:
+        -> title
+        -> year
+        -> path
+        -> video filename and path
+        -> subtitle filename and path
+        -> image filename and path
+
+    :return:
+    """
     video_list = []
     video_ext = ['.mp4', '.mkv', '.avi']
     sub_ext = ['.vtt']
     img_ext = ['jpg', '.png', '.tif']
 
     sub_dirs = retrieve_dirs()
+
+    # Loop through each Movie directory
     for sub_dir in sub_dirs:
+
+        # initialize new Video class to hold file details.
+        # This would include the title, video file, subtitle and image.
         new_vid = Video()
+        new_vid.directory = sub_dir
+
         for _, _, files in os.walk(sub_dir):
-            # initialize new Video class to hold file details.
-            # This would include the title, video file, subtitle and image.
-            new_vid.directory = sub_dir
             for curr_file in files:
                 full_file_path = sub_dir + curr_file
                 if os.path.isfile(full_file_path):
+
                     # set the video filename
                     if curr_file.endswith(tuple(video_ext)):
                         new_vid.video = curr_file
                         new_vid.title, new_vid.year = parse_title(curr_file)
-                        image_file = Path(sub_dir + 'medium-cover.jpg')
+                        image_file = Path(sub_dir + IMAGE_FILENAME)
+
                         if not image_file.exists():
                             retrieve_image_from_url(new_vid.title, new_vid.year, new_vid.directory)
                     # set the image
                     elif curr_file.endswith(tuple(img_ext)):
-                        if curr_file.split('.')[0] == 'medium-cover':
+                        # Check if the image name == 'medium_cover.jpg'
+                        if curr_file.split('.')[0] == IMAGE_FILENAME.split('.')[0]:
                             new_vid.image = curr_file
                         else:
                             new_vid.image = retrieve_image_from_url(new_vid.title, new_vid.year, new_vid.directory)
@@ -104,12 +135,6 @@ def read_dir():
                         pass
         video_list.append(new_vid)
         new_vid = None
-
-    # for obj in video_list:
-    #     print(obj.title)
-    #     print(obj.subtitle)
-    #     print(obj.video)
-    #     print(obj.image)
 
     return video_list
 
@@ -134,7 +159,9 @@ def generate_html(this_videos_list):
                     with tag('a', klass='navbar-brand', href='#'):
                         text('Director\'s Seat')
                     doc.asis(
-                        '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">')
+                        '<button class="navbar-toggler" type="button" data-toggle="collapse" ' +
+                        'data-target="#navbarResponsive" aria-controls="navbarResponsive" ' +
+                        'aria-expanded="false" aria-label="Toggle navigation">')
                     doc.asis('<span class="navbar-toggler-icon"></span>')
                     doc.asis('</button>')
                     with tag('div', klass='collapse navbar-collapse', id='navbarResponsive'):
