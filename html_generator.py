@@ -6,7 +6,7 @@ from yattag import Doc
 
 from convert_srt_to_vtt import start_conversion
 
-ASSETS_FOLDER = ['assets/', 'css/', 'vendor/', '__pycache__/', 'miniserver/']
+ASSETS_FOLDER = ['assets/', 'css/', 'vendor/', '../__pycache__/', '../miniserver/']
 
 
 class Video(object):
