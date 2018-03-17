@@ -1,11 +1,13 @@
 # Created by: Geoffrey Eslava
 import os
 from glob import glob
+from pathlib import Path
+
 from yattag import Doc
 from convert_srt_to_vtt import start_conversion
 from image_handler import retrieve_image_from_url
 
-ASSETS_FOLDER = ['assets/', 'css/', 'vendor/', '../__pycache__/', '../miniserver/']
+ASSETS_FOLDER = ['assets/', 'css/', 'vendor/', '__pycache__/', 'miniserver/']
 
 
 class Video(object):
@@ -48,7 +50,8 @@ def parse_title(movie_filename):
 
 def retrieve_dirs():
     dirs = []
-    directories = glob('../*/')
+    os.chdir('../')
+    directories = glob('*/')
     for directory in directories:
         if directory not in ASSETS_FOLDER:
             dirs.append(directory)
@@ -76,6 +79,9 @@ def read_dir():
                     if curr_file.endswith(tuple(video_ext)):
                         new_vid.video = curr_file
                         new_vid.title, new_vid.year = parse_title(curr_file)
+                        image_file = Path(sub_dir + 'medium-cover.jpg')
+                        if not image_file.exists():
+                            retrieve_image_from_url(new_vid.title, new_vid.year, new_vid.directory)
                     # set the image
                     elif curr_file.endswith(tuple(img_ext)):
                         if curr_file.split('.')[0] == 'medium-cover':
@@ -196,12 +202,11 @@ def generate_html(this_videos_list):
             doc.asis('<script src="miniserver/vendor/jquery/jquery.min.js"></script>')
             doc.asis('<script src="miniserver/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>')
 
-    print('Successfully generated HTML file.')
-
     f = open('index.html', 'w')
 
     f.write(doc.getvalue())
     f.close()
+    print('Successfully generated HTML file.')
 
 
 # generate video player page
@@ -278,4 +283,4 @@ if __name__ == '__main__':
     video_list = read_dir()
     generate_html(video_list)
     generate_video_player_html(video_list)
-    os.rename('index.html', '../index.html')
+    # os.rename('index.html', '../index.html')
