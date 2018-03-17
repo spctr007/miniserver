@@ -272,13 +272,6 @@ def generate_video_player_html(movie_list):
 
 
 if __name__ == '__main__':
-    parent_dirs = retrieve_dirs()
-    for dir in parent_dirs:
-        print(dir)
-    # video_list = read_dir()
-    # print(len(video_list))
-    # for video in video_list:
-    #     print(video.title)
-    #     print(video.subtitle)
-    # generate_html(video_list)
-    # generate_video_player_html(video_list)
+    video_list = read_dir()
+    generate_html(video_list)
+    generate_video_player_html(video_list)
