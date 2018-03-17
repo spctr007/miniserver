@@ -114,8 +114,8 @@ def generate_html(this_videos_list):
             doc.stag('meta', name='viewport', content='width=device-width initial-scale=1, shrink-to-fit=no')
             doc.stag('meta', name='description', content='')
             doc.stag('meta', name='author', content='')
-            doc.stag('link', rel='stylesheet', href='vendor/bootstrap/css/bootstrap.min.css')
-            doc.stag('link', rel='stylesheet', href='css/main.css')
+            doc.stag('link', rel='stylesheet', href='miniserver/vendor/bootstrap/css/bootstrap.min.css')
+            doc.stag('link', rel='stylesheet', href='miniserver/css/main.css')
             with tag('title'):
                 text('Director\'s Seat')
         with tag('body'):
@@ -190,8 +190,8 @@ def generate_html(this_videos_list):
                         text('Copyright (c) 2018 Eslava Movie Database')
 
             # -- Bootstrap core Javascript -- #
-            doc.asis('<script src="vendor/jquery/jquery.min.js"></script>')
-            doc.asis('<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>')
+            doc.asis('<script src="miniserver/vendor/jquery/jquery.min.js"></script>')
+            doc.asis('<script src="miniserver/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>')
 
     print('Successfully generated HTML file.')
 
@@ -212,8 +212,8 @@ def generate_video_player_html(movie_list):
                 doc.stag('meta', name='viewport', content='width=device-width initial-scale=1, shrink-to-fit=no')
                 doc.stag('meta', name='description', content='')
                 doc.stag('meta', name='author', content='')
-                doc.stag('link', rel='stylesheet', href='../vendor/bootstrap/css/bootstrap.min.css')
-                doc.stag('link', rel='stylesheet', href='../css/main.css')
+                doc.stag('link', rel='stylesheet', href='../miniserver/vendor/bootstrap/css/bootstrap.min.css')
+                doc.stag('link', rel='stylesheet', href='../miniserver/css/main.css')
                 with tag('title'):
                     text('Director\'s Seat')
             with tag('body'):
@@ -260,8 +260,8 @@ def generate_video_player_html(movie_list):
                             text('Copyright (c) 2018 Eslava Movie Database')
 
                 # -- Bootstrap core Javascript -- #
-                doc.asis('<script src="vendor/jquery/jquery.min.js"></script>')
-                doc.asis('<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>')
+                doc.asis('<script src="../miniserver/vendor/jquery/jquery.min.js"></script>')
+                doc.asis('<script src="../miniserver/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>')
 
         print('Successfully generated player HTML file to ' + video.directory)
 
@@ -275,3 +275,4 @@ if __name__ == '__main__':
     video_list = read_dir()
     generate_html(video_list)
     generate_video_player_html(video_list)
+    os.rename('index.html', '../index.html')
