@@ -6,7 +6,7 @@ from yattag import Doc
 
 from convert_srt_to_vtt import start_conversion
 
-ASSETS_FOLDER = ['assets/', 'css/', 'vendor/', '__pycache__/']
+ASSETS_FOLDER = ['assets/', 'css/', 'vendor/', '__pycache__/', 'miniserver/']
 
 
 class Video(object):
@@ -49,7 +49,7 @@ def parse_title(movie_filename):
 
 def retrieve_dirs():
     dirs = []
-    directories = glob('*/')
+    directories = glob('../*/')
     for directory in directories:
         if directory not in ASSETS_FOLDER:
             dirs.append(directory)
@@ -272,10 +272,13 @@ def generate_video_player_html(movie_list):
 
 
 if __name__ == '__main__':
-    video_list = read_dir()
+    parent_dirs = retrieve_dirs()
+    for dir in parent_dirs:
+        print(dir)
+    # video_list = read_dir()
     # print(len(video_list))
     # for video in video_list:
     #     print(video.title)
     #     print(video.subtitle)
-    generate_html(video_list)
-    generate_video_player_html(video_list)
+    # generate_html(video_list)
+    # generate_video_player_html(video_list)
