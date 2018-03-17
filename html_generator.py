@@ -81,7 +81,7 @@ def read_dir():
                         if curr_file.split('.')[0] == 'medium-cover':
                             new_vid.image = curr_file
                         else:
-                            new_vid.image = retrieve_image_from_url(new_vid.title, new_vid.directory)
+                            new_vid.image = retrieve_image_from_url(new_vid.title, new_vid.year, new_vid.directory)
 
                     # set the subtitle
                     elif curr_file.endswith('vtt'):
