@@ -135,7 +135,7 @@ def generate_html(this_videos_list):
                                     with tag('span', klass='sr-only'):
                                         text('(current)')
                             with tag('li', klass='nav-item'):
-                                with tag('a', klass='nav-link', href='https://yts.am', target='_blank'):
+                                with tag('a', klass='nav-link', href='https://yts.am/yify', target='_blank'):
                                     text('YTS.AM')
                             with tag('li', klass='nav-item'):
                                 with tag('a', klass='nav-link', href='#'):
@@ -151,7 +151,7 @@ def generate_html(this_videos_list):
                         text('Welcome to Our Movie Collection')
                         with tag('p', klass='lead'):
                             text('This is our latest collection of movies downloaded from YIFY (YTS.AM)')
-                        with tag('a', href='https://yts.am/', klass='btn btn-primary btn-lg', target='_blank'):
+                        with tag('a', href='https://yts.am/yify', klass='btn btn-primary btn-lg', target='_blank'):
                             text('Take me to YIFY')
                 # -- Page Features -- #
                 total_count = len(this_videos_list)
@@ -235,7 +235,7 @@ def generate_video_player_html(movie_list):
                                         with tag('span', klass='sr-only'):
                                             text('(current)')
                                 with tag('li', klass='nav-item'):
-                                    with tag('a', klass='nav-link', href='https://yts.am', target='_blank'):
+                                    with tag('a', klass='nav-link', href='https://yts.am/yify', target='_blank'):
                                         text('YTS.AM')
                                 with tag('li', klass='nav-item'):
                                     with tag('a', klass='nav-link', href='#'):
