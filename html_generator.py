@@ -1,10 +1,9 @@
 # Created by: Geoffrey Eslava
 import os
 from glob import glob
-
 from yattag import Doc
-
 from convert_srt_to_vtt import start_conversion
+from image_handler import retrieve_image_from_url
 
 ASSETS_FOLDER = ['assets/', 'css/', 'vendor/', '../__pycache__/', '../miniserver/']
 
@@ -81,6 +80,9 @@ def read_dir():
                     elif curr_file.endswith(tuple(img_ext)):
                         if curr_file.split('.')[0] == 'medium-cover':
                             new_vid.image = curr_file
+                        else:
+                            new_vid.image = retrieve_image_from_url(new_vid.title, new_vid.directory)
+
                     # set the subtitle
                     elif curr_file.endswith('vtt'):
                         new_vid.subtitle = curr_file
