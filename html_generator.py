@@ -90,6 +90,7 @@ def read_dir():
                         vtt_path = sub_dir + '/' + vtt_file + '.vtt'
                         if not os.path.isfile(vtt_path):
                             subtitle = start_conversion(full_file_path, vtt_path)
+                            print('Successfully created vtt file: ' + subtitle)
                             new_vid.subtitle = str(subtitle)
                     else:
                         pass
