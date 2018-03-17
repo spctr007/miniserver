@@ -79,7 +79,8 @@ def read_dir():
                         new_vid.title, new_vid.year = parse_title(curr_file)
                     # set the image
                     elif curr_file.endswith(tuple(img_ext)):
-                        new_vid.image = curr_file
+                        if curr_file.split('.')[0] == 'medium-cover':
+                            new_vid.image = curr_file
                     # set the subtitle
                     elif curr_file.endswith('vtt'):
                         new_vid.subtitle = curr_file
