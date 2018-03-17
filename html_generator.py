@@ -183,8 +183,8 @@ def generate_html(this_videos_list):
             # -- Page Content -- #
             with tag('div', klass='container'):
                 # -- Jumbotron Header -- #
-                with tag('header', klass='jumbotron my-3'):
-                    with tag('h1', klass='display-3'):
+                with tag('header', klass='jumbotron my-4'):
+                    with tag('h1', klass='display-4'):
                         text('Welcome to Our Movie Collection')
                         with tag('p', klass='lead'):
                             text('This is our latest collection of movies downloaded from YIFY (YTS.AM)')
