@@ -42,7 +42,7 @@ def parse_title(movie_filename):
             year = word
             break
         else:
-            actual_title = actual_title + word
+            actual_title = actual_title + ' ' + word
 
     return actual_title, year
 
