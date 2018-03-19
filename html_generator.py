@@ -268,7 +268,7 @@ def generate_video_player_html():
                         with tag('div', klass='header'):
                             text(video.get_full_title())
                         with tag('div', klass='card-body'):
-                            with tag('video', src=video.video, controls='', autoplay=''):
+                            with tag('video', src=video.video_filename, controls='', autoplay=''):
                                 doc.asis('<track kind="subtitles" label="English" src="' +
                                          video.subtitle + '" srclang="en" default="">')
 
