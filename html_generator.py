@@ -9,6 +9,7 @@ from image_handler import retrieve_image_from_url
 
 ASSETS_FOLDER = ['assets/', 'css/', 'vendor/', '__pycache__/', 'miniserver/']
 IMAGE_FILENAME = 'medium-cover.jpg'
+VIDEO_LIST = []
 
 
 class Video(object):
@@ -35,6 +36,19 @@ class Video(object):
         return self.title + ' (' + self.year + ')'
 
 
+def parse_path(movie_paths):
+    for movie in movie_paths:
+        new_vid = Video()
+        split_data = movie.split('/')
+        directory = split_data[0]
+        title = split_data[1]
+        new_vid.directory = directory + '/'
+        new_vid.video_filename = title
+        new_vid.title, new_vid.year = parse_title(title)
+    
+        VIDEO_LIST.append(new_vid)
+
+
 def parse_title(movie_filename):
     """
     Parsing of the title and year based on the Movie's filename.
@@ -54,15 +68,16 @@ def parse_title(movie_filename):
     return actual_title, year
 
 
-def retrieve_dirs():
+def retrieve_dirs(file_extension=''):
     """
     Navigate to the root directory of all the Movies and
     get the list of movie directories.
+    :param file_extension:
     :return: Array of Directory names.
     """
     dirs = []
     os.chdir('../')
-    directories = glob('*/')
+    directories = glob('*/' + file_extension)
     for directory in directories:
         if directory not in ASSETS_FOLDER:
             dirs.append(directory)
@@ -84,62 +99,30 @@ def read_dir():
 
     :return:
     """
-    video_list = []
-    video_ext = ['.mp4', '.mkv', '.avi']
-    sub_ext = ['.vtt']
-    img_ext = ['jpg', '.png', '.tif']
+    # video_list = []
+    # video_ext = ['.mp4', '.mkv', '.avi']
+    # sub_ext = ['.vtt', '.srt']
+    # img_ext = ['jpg', '.png', '.tif']
 
-    sub_dirs = retrieve_dirs()
+    sub_dirs = retrieve_dirs('*.mp4')
+    parse_path(sub_dirs)
 
     # Loop through each Movie directory
-    for sub_dir in sub_dirs:
-
-        # initialize new Video class to hold file details.
-        # This would include the title, video file, subtitle and image.
-        new_vid = Video()
-        new_vid.directory = sub_dir
-
-        for _, _, files in os.walk(sub_dir):
-            for curr_file in files:
-                full_file_path = sub_dir + curr_file
-                if os.path.isfile(full_file_path):
-
-                    # set the video filename
-                    if curr_file.endswith(tuple(video_ext)):
-                        new_vid.video = curr_file
-                        new_vid.title, new_vid.year = parse_title(curr_file)
-                        image_file = Path(sub_dir + IMAGE_FILENAME)
-
-                        if not image_file.exists():
-                            retrieve_image_from_url(new_vid.title, new_vid.year, new_vid.directory)
-                    # set the image
-                    elif curr_file.endswith(tuple(img_ext)):
-                        # Check if the image name == 'medium_cover.jpg'
-                        if curr_file.split('.')[0] == IMAGE_FILENAME.split('.')[0]:
-                            new_vid.image = curr_file
-                        else:
-                            new_vid.image = retrieve_image_from_url(new_vid.title, new_vid.year, new_vid.directory)
-
-                    # set the subtitle
-                    elif curr_file.endswith('vtt'):
-                        new_vid.subtitle = curr_file
-                    elif curr_file.endswith('srt'):
-                        # check if the vtt file exists
-                        vtt_file = os.path.splitext(curr_file)[0]
-                        vtt_path = sub_dir + '/' + vtt_file + '.vtt'
-                        if not os.path.isfile(vtt_path):
-                            subtitle = start_conversion(full_file_path, vtt_path)
-                            print('Successfully created vtt file: ' + str(subtitle))
-                            new_vid.subtitle = str(subtitle)
-                    else:
-                        pass
-        video_list.append(new_vid)
-        new_vid = None
-
-    return video_list
+    for video in VIDEO_LIST:
+        if not any(fname == 'medium-cover.jpg' for fname in os.listdir(video.directory)):
+            print('no image file for ' + video.directory)
+            video.image = retrieve_image_from_url(video.title, video.year, video.directory)
+        else:
+            video.image = 'medium-cover.jpg'
+        # for _, _, dir_file in os.walk(video.directory):
+        #     for curr_file in dir_file:    
+        #         if not glob(video.directory + '*.jpg'):
+        #             print('No image file in ' + video.directory)
+                    # if not os.path.basename(curr_file) == IMAGE_FILENAME:
+                        # 
 
 
-def generate_html(this_videos_list):
+def generate_html():
     doc, tag, text, line = Doc().ttl()
     doc.asis('<!DOCTYPE html>')
     with tag('html', lang='en'):
@@ -191,9 +174,9 @@ def generate_html(this_videos_list):
                         with tag('a', href='https://yts.am/yify', klass='btn btn-primary btn-lg', target='_blank'):
                             text('Take me to YIFY')
                 # -- Page Features -- #
-                total_count = len(this_videos_list)
+                total_count = len(VIDEO_LIST)
                 counter = 0
-                for video in this_videos_list:
+                for video in VIDEO_LIST:
                     if counter <= total_count:
                         if counter == 0:
                             doc.asis('<div class="row text-center">')
@@ -237,8 +220,8 @@ def generate_html(this_videos_list):
 
 
 # generate video player page
-def generate_video_player_html(movie_list):
-    for video in movie_list:
+def generate_video_player_html():
+    for video in VIDEO_LIST:
         doc, tag, text, line = Doc().ttl()
         doc.asis('<!DOCTYPE html>')
         with tag('html', lang='en'):
@@ -307,7 +290,7 @@ def generate_video_player_html(movie_list):
 
 
 if __name__ == '__main__':
-    video_list = read_dir()
-    generate_html(video_list)
-    generate_video_player_html(video_list)
+    read_dir()
+    generate_html()
+    generate_video_player_html()
     # os.rename('index.html', '../index.html')

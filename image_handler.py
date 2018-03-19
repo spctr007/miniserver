@@ -9,8 +9,10 @@ def retrieve_image_from_url(title, year, path):
     data = result.json()['data']
     movie_details = data['movies']
 
+    slug_data = title.strip().replace(' ', '-').replace('\'', '').replace('.', '').lower() + '-' + year
+
     for detail in movie_details:
-        if detail['year'] == int(year):
+        if slug_data == detail['slug']:
             print(detail['medium_cover_image'] + ' image downloaded successfully.')
             r = get(detail['medium_cover_image'])
             new_file = open(path + FILENAME, 'wb')
@@ -21,4 +23,4 @@ def retrieve_image_from_url(title, year, path):
 
 
 if __name__ == '__main__':
-    retrieve_image_from_url('The Karate Kid', '2010', '')
+    retrieve_image_from_url('The Karate Kid', '', '')
