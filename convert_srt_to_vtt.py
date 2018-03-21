@@ -2,8 +2,11 @@ import os
 import re
 
 
-def start_conversion(srt_path, vtt_path):
+def start_conversion(directory, srt_filename):
     try:
+        srt_path = srt_filename
+        file_basename = srt_filename[0:-3]
+        vtt_path = file_basename + 'vtt'
         srt_file = open(srt_path, 'r')
         vtt_file = open(vtt_path, 'w')
         srt_lines = srt_file.readlines()
@@ -30,9 +33,10 @@ def start_conversion(srt_path, vtt_path):
         srt_file.close()
         if os.path.isfile(vtt_path):
             vtt_file.close()
+        print('Successfully generated VTT subtitle for ' + srt_filename) 
 
-    return vtt_file
+    return vtt_path
 
 
 if __name__ == '__main__':
-    start_conversion()
+    start_conversion('../Pixels (2015)/', 'Pixels.2015.1080p.BluRay.x264.YIFY.srt')

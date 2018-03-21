@@ -6,6 +6,7 @@ from pathlib import Path
 from yattag import Doc
 from convert_srt_to_vtt import start_conversion
 from image_handler import retrieve_image_from_url
+from convert_srt_to_vtt import start_conversion
 
 ASSETS_FOLDER = ['assets/', 'css/', 'vendor/', '__pycache__/', 'miniserver/']
 IMAGE_FILENAME = 'medium-cover.jpg'
@@ -110,10 +111,19 @@ def read_dir():
     # Loop through each Movie directory
     for video in VIDEO_LIST:
         if not any(fname == 'medium-cover.jpg' for fname in os.listdir(video.directory)):
-            print('no image file for ' + video.directory)
+            print('No image file for ' + video.directory)
             video.image = retrieve_image_from_url(video.title, video.year, video.directory)
         else:
             video.image = 'medium-cover.jpg'
+
+        # Generate VTT file from SRT file.
+        os.chdir(video.directory)
+        for fname in os.listdir('.'):
+            if os.path.isfile(fname) and fname.endswith('.srt'):
+                video.subtitle = start_conversion(video.directory, fname)
+            
+        os.chdir('..')
+                
         # for _, _, dir_file in os.walk(video.directory):
         #     for curr_file in dir_file:    
         #         if not glob(video.directory + '*.jpg'):
@@ -220,8 +230,14 @@ def generate_html():
 
 
 # generate video player page
-def generate_video_player_html():
+def generate_video_player_html(test_list=[]):
+    global VIDEO_LIST
+    if test_list and VIDEO_LIST:
+        VIDEO_LIST = test_list
+
     for video in VIDEO_LIST:
+        print('Start generating html file for ' + video.directory)
+        print(video.subtitle)
         doc, tag, text, line = Doc().ttl()
         doc.asis('<!DOCTYPE html>')
         with tag('html', lang='en'):
@@ -281,7 +297,7 @@ def generate_video_player_html():
                 doc.asis('<script src="../miniserver/vendor/jquery/jquery.min.js"></script>')
                 doc.asis('<script src="../miniserver/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>')
 
-        print('Successfully generated player HTML file to ' + video.directory)
+        print('Successfully generated PLAYER HTML file for ' + video.directory)
 
         f = open(video.directory + 'player.html', 'w')
 
@@ -292,5 +308,11 @@ def generate_video_player_html():
 if __name__ == '__main__':
     read_dir()
     generate_html()
+    # vid_list = []
+    # new_video = Video()
+    # new_video.directory = 'Pixels (2015)/'
+    # new_video.video_filename = 'Pixels.2015.720p.BluRay.x264.YIFY.mp4'
+    # new_video.subtitle = 'Pixels.2015.1080p.BluRay.x264.YIFY.vtt'
+    # vid_list.append(new_video)
     generate_video_player_html()
     # os.rename('index.html', '../index.html')
