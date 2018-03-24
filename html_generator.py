@@ -1,12 +1,11 @@
 # Created by: Geoffrey Eslava
 import os
 from glob import glob
-from pathlib import Path
 
 from yattag import Doc
+
 from convert_srt_to_vtt import start_conversion
 from image_handler import retrieve_image_from_url
-from convert_srt_to_vtt import start_conversion
 
 ASSETS_FOLDER = ['assets/', 'css/', 'vendor/', '__pycache__/', 'miniserver/']
 IMAGE_FILENAME = 'medium-cover.jpg'
@@ -195,7 +194,7 @@ def generate_html():
                                     doc.stag('img', klass='card-img-top', src=video.get_image_path(), alt=video.title)
                                     with tag('div', klass='card-body'):
                                         with tag('h4', klass='card-title'):
-                                            text(video.get_full_title())
+                                            tØext(video.get_full_title())
                                     with tag('div', klass='card-footer'):
                                         with tag('a', href=video.directory + 'player.html', klass='btn btn-primary'):
                                             text('Play Movie')
