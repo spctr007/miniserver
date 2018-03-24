@@ -5,14 +5,9 @@
 
 ### Prerequisite:
 * Installed `python 2.x or 3.x`
-* Additional libraries:
-    * yattag
+* Install libraries from the `requirements.txt` file:
     ```
-        $ pip install yattag
-    ```
-    * glob
-    ```
-        $ pip install glob
+        $ pip install -r requirements.txt
     ```
 * Installed `Nginx` on your local machine.
     * [Install Nginx on Ubuntu](https://mediatemple.net/community/products/developer/204405534/install-nginx-on-ubuntu)
