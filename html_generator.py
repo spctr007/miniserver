@@ -194,7 +194,7 @@ def generate_html():
                                     doc.stag('img', klass='card-img-top', src=video.get_image_path(), alt=video.title)
                                     with tag('div', klass='card-body'):
                                         with tag('h4', klass='card-title'):
-                                            tØext(video.get_full_title())
+                                            text(video.get_full_title())
                                     with tag('div', klass='card-footer'):
                                         with tag('a', href=video.directory + 'player.html', klass='btn btn-primary'):
                                             text('Play Movie')
