@@ -6,6 +6,7 @@ from yattag import Doc
 
 from convert_srt_to_vtt import start_conversion
 from image_handler import retrieve_image_from_url
+from subtitle_retriever import get_subtitle
 
 ASSETS_FOLDER = ['assets/', 'css/', 'vendor/', '__pycache__/', 'miniserver/']
 IMAGE_FILENAME = 'medium-cover.jpg'
@@ -22,6 +23,7 @@ class Video(object):
         self.video = ''
         self.image = ''
         self.directory = ''
+        self.imdb_code = ''
 
     def get_video_path(self):
         return self.directory + self.video
@@ -117,18 +119,25 @@ def read_dir():
 
         # Generate VTT file from SRT file.
         os.chdir(video.directory)
+
+        # Check if the folder contains a subtitle. If not,
+        # then retrieve the subtitle from yifysubtitles.com
+        if not any(fname.endswith('.srt') for fname in os.listdir('.')):
+            print(video.directory + "This movie has no subtitles yow!")
+            get_subtitle(video.title, video.year)
+
         for fname in os.listdir('.'):
             if os.path.isfile(fname) and fname.endswith('.srt'):
                 video.subtitle = start_conversion(video.directory, fname)
-            
+
         os.chdir('..')
-                
+
         # for _, _, dir_file in os.walk(video.directory):
         #     for curr_file in dir_file:    
         #         if not glob(video.directory + '*.jpg'):
         #             print('No image file in ' + video.directory)
-                    # if not os.path.basename(curr_file) == IMAGE_FILENAME:
-                        # 
+        # if not os.path.basename(curr_file) == IMAGE_FILENAME:
+        #
 
 
 def generate_html():
