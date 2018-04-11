@@ -123,7 +123,7 @@ def read_dir():
         # Check if the folder contains a subtitle. If not,
         # then retrieve the subtitle from yifysubtitles.com
         if not any(fname.endswith('.srt') for fname in os.listdir('.')):
-            print(video.directory + "This movie has no subtitles yow!")
+            print("Retrieving subtitle for " + video.title)
             get_subtitle(video.title, video.year)
 
         for fname in os.listdir('.'):
@@ -234,7 +234,7 @@ def generate_html():
 
     f.write(doc.getvalue())
     f.close()
-    print('Successfully generated HTML file.')
+    print('Successfully generated INDEX page.')
 
 
 # generate video player page
@@ -315,7 +315,6 @@ def generate_video_player_html(test_list=[]):
 
 if __name__ == '__main__':
     read_dir()
-    generate_html()
     # vid_list = []
     # new_video = Video()
     # new_video.directory = 'Pixels (2015)/'
@@ -323,4 +322,5 @@ if __name__ == '__main__':
     # new_video.subtitle = 'Pixels.2015.1080p.BluRay.x264.YIFY.vtt'
     # vid_list.append(new_video)
     generate_video_player_html()
+    generate_html()
     # os.rename('index.html', '../index.html')
