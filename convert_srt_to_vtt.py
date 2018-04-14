@@ -27,7 +27,7 @@ def start_conversion(directory, srt_filename):
                     line.replace('shit', '****').replace('fuck', '****')
                     vtt_file.write(line)
     except UnicodeDecodeError as e:
-        print('Unable to read srt file.')
+        print('Unable to read srt file for ' + srt_filename)
         print(e)
 
         # Close all existing files before beginning to
