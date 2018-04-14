@@ -176,8 +176,8 @@ def generate_html():
                                 with tag('a', klass='nav-link', href='https://yts.am/yify', target='_blank'):
                                     text('YTS.AM')
                             with tag('li', klass='nav-item'):
-                                with tag('a', klass='nav-link', href='#'):
-                                    text('Services')
+                                with tag('a', klass='nav-link', href='http://www.yifysubtitles.com', target='_blank'):
+                                    text('Subtitles')
                             with tag('li', klass='nav-item'):
                                 with tag('a', klass='nav-link', href='#'):
                                     text('Contact')
@@ -281,8 +281,8 @@ def generate_video_player_html(test_list=[]):
                                     with tag('a', klass='nav-link', href='https://yts.am/yify', target='_blank'):
                                         text('YTS.AM')
                                 with tag('li', klass='nav-item'):
-                                    with tag('a', klass='nav-link', href='#'):
-                                        text('Services')
+                                    with tag('a', klass='nav-link', href='http://www.yifysubtitles.com', target='_blank'):
+                                        text('Subtitles')
                                 with tag('li', klass='nav-item'):
                                     with tag('a', klass='nav-link', href='#'):
                                         text('Contact')
