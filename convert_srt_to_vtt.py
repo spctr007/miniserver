@@ -26,7 +26,8 @@ def start_conversion(directory, srt_filename):
                     # remove profanity
                     profanity_words = ['shit', 'Shit', 'Fuck', 'fuck', 'Bitch', 'bitch']
                     for word in profanity_words:
-                        line.replace(word, '****')
+                        line = line.replace(word, '****')
+
                     vtt_file.write(line)
     except UnicodeDecodeError as e:
         print('Unable to read srt file for ' + srt_filename)
