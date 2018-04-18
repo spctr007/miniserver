@@ -199,7 +199,7 @@ def generate_html():
                         if counter == 0:
                             doc.asis('<div class="row text-center">')
                             with tag('div', klass='col-lg-3 col-md-6 mb-4'):
-                                with tag('div', klass='card'):
+                                with tag('div', klass='card border-dark'):
                                     doc.stag('img', klass='card-img-top', src=video.get_image_path(), alt=video.title)
                                     with tag('div', klass='card-body'):
                                         with tag('h4', klass='card-title'):
@@ -210,7 +210,7 @@ def generate_html():
                             counter += 1
                         else:
                             with tag('div', klass='col-lg-3 col-md-6 mb-4'):
-                                with tag('div', klass='card'):
+                                with tag('div', klass='card border-dark'):
                                     doc.stag('img', klass='card-img-top', src=video.get_image_path(), alt=video.title)
                                     with tag('div', klass='card-body'):
                                         with tag('h4', klass='card-title'):
