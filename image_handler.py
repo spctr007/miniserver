@@ -20,9 +20,8 @@ def retrieve_image_from_url(title, year, path):
                 if slug_data == detail['slug']:
                     print(detail['medium_cover_image'] + ' image downloaded successfully.')
                     r = get(detail['medium_cover_image'])
-                    new_file = open(path + FILENAME, 'wb')
-                    new_file.write(r.content)
-                    new_file.close()
+                    with open(path + FILENAME, 'wb') as new_file:
+                        new_file.write(r.content)
 
             return FILENAME
         else:
@@ -34,4 +33,4 @@ def retrieve_image_from_url(title, year, path):
 
 
 if __name__ == '__main__':
-    retrieve_image_from_url('The Karate Kid', '', '')
+    retrieve_image_from_url('The School of Rock', year=2003, path='')
