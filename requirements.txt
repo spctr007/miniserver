@@ -17,7 +17,7 @@ psycopg2==2.7.4
 pylint==1.8.3
 PySocks==1.6.8
 pytz==2018.3
-PyYAML==3.12
+PyYAML==4.2b1
 requests==2.5.1
 six==1.11.0
 urllib3==1.22
