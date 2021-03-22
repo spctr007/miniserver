@@ -8,7 +8,7 @@ glob2==0.6
 html2text==2014.12.29
 isort==4.3.4
 lazy-object-proxy==1.3.1
-lxml==4.1.1
+lxml==4.6.3
 mccabe==0.6.1
 pip-autoremove==0.9.0
 powerline-gitstatus==1.2.1
